@@ -1,46 +1,24 @@
-import { RiDeleteBin3Fill, RiEditBoxLine } from 'react-icons/ri';
+import { SingleTodo } from './SingleTodo';
+import { useTodoContext } from '../context/useTodoContext';
+import './TodoList.css';
 
-export const TodoList = ({ todos, setTodos, isEdit, setIsEdit }) => {
-  const handleDelete = (todoId) => {
-    const filteredTodo = [...todos].filter((todo) => todo.id !== todoId);
-    setTodos(filteredTodo);
-  };
+export const TodoList = () => {
+  const { todos, setTodos } = useTodoContext();
 
-  const handleEdit = ({ id }) => {
-    const editedTodo = todos.find((todo) => todo.id === id);
-    setIsEdit(editedTodo);
+  const clearTodos = () => {
+    setTodos([]);
   };
 
   return (
-    <ul className='todo-list'>
-      {todos.map((todo) => {
-        const { id, text } = todo;
-        return (
-          <li key={id}>
-            <input
-              type='text'
-              value={text}
-              onChange={(e) => e.preventDefault()}
-            />
-            <div>
-              <button
-                className='btn-edit'
-                type='button'
-                onClick={() => handleEdit(todo)}
-              >
-                <RiEditBoxLine />
-              </button>
-              <button
-                className='btn-reset'
-                type='button'
-                onClick={() => handleDelete(id)}
-              >
-                <RiDeleteBin3Fill />
-              </button>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <ul className='todo-list'>
+        {todos.map((todo) => (
+          <SingleTodo {...todo} key={todo.id} />
+        ))}
+      </ul>
+      <button className='list-btn-reset' onClick={clearTodos}>
+        Clear todos
+      </button>
+    </>
   );
 };

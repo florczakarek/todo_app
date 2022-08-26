@@ -1,43 +1,21 @@
-import { useEffect, useState } from 'react';
 import { Form } from './components/Form';
 import { TodoList } from './components/TodoList';
+import { useTodoContext } from './context/useTodoContext';
 
 function App() {
-  const initialState = JSON.parse(localStorage.getItem('todos')) || [];
-
-  const [todo, setTodo] = useState('');
-  const [todos, setTodos] = useState(initialState);
-  const [isEdit, setIsEdit] = useState(null);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  });
-  const clearTodos = () => {
-    setTodos([]);
-  };
+  const { todos } = useTodoContext();
 
   return (
     <div className='container'>
-      <Form
-        todo={todo}
-        setTodo={setTodo}
-        todos={todos}
-        setTodos={setTodos}
-        isEdit={isEdit}
-        setIsEdit={setIsEdit}
-      />
-      {todos.length > 0 && (
-        <>
-          <TodoList
-            todos={todos}
-            setTodos={setTodos}
-            isEdit={isEdit}
-            setIsEdit={setIsEdit}
-          />
-          <button className='btn-reset' onClick={clearTodos}>
-            Clear todos
-          </button>
-        </>
+      <Form />
+      {todos.length > 0 ? (
+        <div className='content'>
+          <TodoList />
+        </div>
+      ) : (
+        <p>
+          you can relax now... <span>🛀</span>
+        </p>
       )}
     </div>
   );
