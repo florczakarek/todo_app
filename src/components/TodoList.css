@@ -1,21 +1,27 @@
-.todo-btn-edit {
-  background-color: inherit;
-  color: rgb(32, 193, 62);
-  border: none;
-  margin-right: 8px;
-  font-size: 24px;
-  cursor: pointer;
-}
-ul .todo-list {
-  max-width: 800px;
+.todo-list {
+  display: grid;
+  gap: 10px;
 }
 
-.list-btn-reset,
-.todo-btn-reset {
-  background-color: inherit;
+.list-btn-reset {
+  display: inline-block;
+  width: 35%;
+  margin: 20px auto 0 auto;
+  background-color: transparent;
   color: rgb(226, 31, 31);
-
   border: none;
   font-size: 24px;
   cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .todo-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .todo-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

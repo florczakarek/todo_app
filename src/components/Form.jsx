@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTodoContext } from '../context/useTodoContext';
 import { v4 as uuid } from 'uuid';
 import './Form.css';
 
 export const Form = () => {
-  const { todo, setTodo, todos, setTodos, isEdit, setIsEdit } =
-    useTodoContext();
+  const {
+    todo,
+    setTodo,
+    todos,
+    setTodos,
+    isEdit,
+    setIsEdit,
+    todoIsValid,
+    setTodoIsValid,
+  } = useTodoContext();
 
   const [enteredTodoTouched, setEnteredTodoTouched] = useState(false);
   const [formIsValid, setFormIsValid] = useState(false);
-  const [todoIsValid, setTodoIsValid] = useState(false);
   const [alert, setAlert] = useState('');
-
-  const todoRef = useRef();
-
-  useEffect(() => {
-    todoRef.current.focus();
-  }, [isEdit]);
 
   const handleTodo = (e) => {
     const { value } = e.target;
@@ -35,24 +36,6 @@ export const Form = () => {
     }
   }, [todoIsValid]);
 
-  const handleBlur = (e) => {
-    const pattern = /^[^0-9]/;
-
-    setEnteredTodoTouched(true);
-
-    if (todo.trim() === '') {
-      validateAlert('Field is required');
-    } else if (
-      (todo.length > 0 && todo.includes('@', 1)) ||
-      todo.includes('#', 1) ||
-      todo.includes('%', 1)
-    ) {
-      validateAlert('Field cannot include special characters like @,#,%');
-    } else if (!pattern.test(todo)) {
-      validateAlert('Field cannot start with number');
-    }
-  };
-
   const validateAlert = (msg) => {
     setTodoIsValid(false);
     setAlert(msg);
@@ -68,7 +51,7 @@ export const Form = () => {
 
   useEffect(() => {
     if (isEdit) {
-      setTodo(isEdit.text);
+      setTodo(isEdit.text.trim());
     } else {
       setTodo('');
     }
@@ -80,11 +63,22 @@ export const Form = () => {
       id: uuid(),
       text: todo,
     };
-
     setEnteredTodoTouched(true);
 
-    if (!todoIsValid) {
-      validateAlert('Field required');
+    const pattern = /^[^0-9]/;
+
+    if (todo.trim() === '') {
+      validateAlert('Field is required');
+      return;
+    } else if (
+      (todo.length > 0 && todo.includes('@', 1)) ||
+      todo.includes('#', 1) ||
+      todo.includes('%', 1)
+    ) {
+      validateAlert('Field cannot include special characters like @,#,%');
+      return;
+    } else if (!pattern.test(todo)) {
+      validateAlert('Field cannot start with number');
       return;
     }
 
@@ -93,12 +87,12 @@ export const Form = () => {
     if (!isEdit) {
       setTodos((prevTodos) => [...prevTodos, newTodo]);
       setTodo('');
-      todoRef.current.focus();
     } else {
       editTodo(todo, isEdit.id);
     }
 
     setEnteredTodoTouched(false);
+    setAlert('');
   };
 
   const nameInputIsInvalid = !todoIsValid && enteredTodoTouched;
@@ -114,11 +108,9 @@ export const Form = () => {
         <input
           className='form-input'
           type='text'
-          ref={todoRef}
           placeholder='Enter your todo...'
           value={todo}
           onChange={handleTodo}
-          onBlur={handleBlur}
         />
         <button disabled={!formIsValid} className='form-btn' type='submit'>
           {!isEdit ? 'Add' : 'Edit'}

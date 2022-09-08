@@ -8,7 +8,7 @@ function App() {
   return (
     <div className='container'>
       <Form />
-      {todos.length > 0 ? (
+      {todos && todos.length > 0 ? (
         <div className='content'>
           <TodoList />
         </div>

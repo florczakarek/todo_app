@@ -1,9 +1,10 @@
 import { SingleTodo } from './SingleTodo';
 import { useTodoContext } from '../context/useTodoContext';
 import './TodoList.css';
+import { motion } from 'framer-motion';
 
 export const TodoList = () => {
-  const { todos, setTodos } = useTodoContext();
+  const { todos, setTodos, todoIsValid } = useTodoContext();
 
   const clearTodos = () => {
     setTodos([]);
@@ -16,9 +17,21 @@ export const TodoList = () => {
           <SingleTodo {...todo} key={todo.id} />
         ))}
       </ul>
-      <button className='list-btn-reset' onClick={clearTodos}>
-        Clear todos
-      </button>
+      {todoIsValid ? (
+        <motion.button
+          whileHover={{
+            scale: 1.1,
+            transition: {
+              repeat: 4,
+              repeatType: 'mirror',
+            },
+          }}
+          className='list-btn-reset'
+          onClick={clearTodos}
+        >
+          Clear All
+        </motion.button>
+      ) : null}
     </>
   );
 };

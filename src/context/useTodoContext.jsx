@@ -3,10 +3,17 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const TodoContext = createContext();
 
 const AppProvider = ({ children }) => {
-  const initialState = JSON.parse(localStorage.getItem('todos')) || [];
+  const getLocalStorage = () => {
+    let todos = localStorage.getItem('todos');
+    if (todos) {
+      return JSON.parse(localStorage.getItem('todos'));
+    }
+    return [];
+  };
 
-  const [todos, setTodos] = useState(initialState);
+  const [todos, setTodos] = useState(getLocalStorage());
   const [todo, setTodo] = useState('');
+  const [todoIsValid, setTodoIsValid] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
@@ -15,7 +22,16 @@ const AppProvider = ({ children }) => {
 
   return (
     <TodoContext.Provider
-      value={{ todo, setTodo, todos, setTodos, isEdit, setIsEdit }}
+      value={{
+        todo,
+        setTodo,
+        todoIsValid,
+        setTodoIsValid,
+        todos,
+        setTodos,
+        isEdit,
+        setIsEdit,
+      }}
     >
       {children}
     </TodoContext.Provider>
