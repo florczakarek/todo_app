@@ -23,7 +23,7 @@ export const SingleTodo = ({ id, text }) => {
       animate={{ y: 10 }}
       transition={{ duration: 0.8, type: 'spring', stiffness: 120 }}
     >
-      <p>{text}</p>
+      <p>{text.substring(0, 25)}</p>
       <div className='todo-btns'>
         {todoIsValid && (
           <>

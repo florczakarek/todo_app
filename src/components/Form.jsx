@@ -77,7 +77,7 @@ export const Form = () => {
     ) {
       validateAlert('Field cannot include special characters like @,#,%');
       return;
-    } else if (!pattern.test(todo)) {
+    } else if (!pattern.test(todo.trim())) {
       validateAlert('Field cannot start with number');
       return;
     }
