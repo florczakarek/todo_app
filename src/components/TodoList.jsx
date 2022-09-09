@@ -32,6 +32,7 @@ export const TodoList = () => {
           Clear All
         </motion.button>
       ) : null}
+      <p>You have planned {todos.length} todo to be done.</p>
     </>
   );
 };

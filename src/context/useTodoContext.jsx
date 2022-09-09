@@ -11,6 +11,10 @@ const AppProvider = ({ children }) => {
     return [];
   };
 
+  useEffect(() => {
+    getLocalStorage();
+  }, []);
+
   const [todos, setTodos] = useState(getLocalStorage());
   const [todo, setTodo] = useState('');
   const [todoIsValid, setTodoIsValid] = useState(false);
